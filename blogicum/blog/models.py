@@ -104,8 +104,7 @@ class Post(BaseModel, TitleModel):
         ordering = ('-pub_date',)
 
     def comment_count(self):
-        num_comments = self.comments.count()
-        return num_comments
+        return self.comments.count()
 
     def __str__(self):
         return self.title
@@ -131,7 +130,7 @@ class Comment(models.Model):
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
-        related_name='comments'
+        related_name='comments',
      )
 
     class Meta:
@@ -140,4 +139,4 @@ class Comment(models.Model):
         ordering = ('created_at',)
 
     def __str__(self):
-        return f'Комментарий от {self.author.username}'
+        return self.author

@@ -73,25 +73,21 @@ class BlogPostDeleteView(LoginRequiredMixin, DeleteView):
         )
 
 
-class BlogCategoryListView(ListView):
-    model = Category
-    template_name = 'blog/category.html'
-    paginate_by = 10
-    context_object_name = 'category'
+# CATEGORY BLOCK
+def get_category_list(request, category_slug):
+    temp_name = 'blog/category.html'
+    category = get_object_or_404(Category.objects.filter(is_published=True), slug=category_slug)
+    posts = category.posts.filter(is_published=True).order_by('-pub_date')
+    paginator = Paginator(posts, 10)
+    page_obj = paginator.get_page(request.GET.get('page'))
 
-    def get_queryset(self):
-        category = get_object_or_404(
-            Category, slug=self.kwargs['category_slug']
-        )
-        posts = category.posts.filter(is_published=True)
-        return posts
+    context = {
+        'category': category,
+        'page_obj': page_obj
+    }
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['category'] = get_object_or_404(
-            Category, slug=self.kwargs['category_slug']
-        )
-        return context
+    return render(request, temp_name, context)
+# END CATEGORY BLOCK
 
 
 class BlogPostDetailView(DetailView):
@@ -159,7 +155,7 @@ def delete_comment(request, post_id, comment_id):
 
 def profile(request, username):
     template_name = 'blog/profile.html'
-    usr = User.objects.get(username=username)
+    usr = get_object_or_404(User, username=username)
     posts = usr.posts.all().order_by('-pub_date')
     paginator = Paginator(posts, 10)
     page_obj = paginator.get_page(request.GET.get('page'))
