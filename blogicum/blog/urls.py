@@ -30,7 +30,7 @@ urlpatterns = [
 
     path(
         'posts/<slug:category_slug>/category/',
-        views.get_category_list,
+        views.BlogCategoryListView.as_view(),
         name='category_posts'
     ),
 
