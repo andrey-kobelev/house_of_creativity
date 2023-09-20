@@ -5,13 +5,13 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
-from django.urls import reverse
+from django.urls import reverse , reverse_lazy
 
 from datetime import datetime
 
 
 from .models import Post, User, Category, Comment
-from .forms import PostModelForm, CommentModelForm, ProfileForm
+from .forms import PostModelForm, CommentModelForm, ProfileForm, CreationForm
 
 
 # BLOCK FOR POSTS
@@ -87,7 +87,9 @@ class BlogCategoryListView(ListView):
         category = get_object_or_404(
             Category, slug=self.kwargs['category_slug']
         )
-        posts = category.posts.filter(is_published=True).order_by('-pub_date')
+        posts = Post.objects.filter(
+            category=category, pub_date__lte=datetime.now()
+        ).order_by('-pub_date')
         return posts
 
     def get_context_data(self, **kwargs):

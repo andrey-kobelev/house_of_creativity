@@ -13,6 +13,11 @@ urlpatterns = [
     ),
 
     path(
+        'posts/<int:post_id>/',
+        views.BlogPostDetailView.as_view(), name='post_detail'
+    ),
+
+    path(
         'posts/<int:post_id>/edit/',
         views.BlogPostUpdateView.as_view(), name='edit_post'
     ),
@@ -21,11 +26,6 @@ urlpatterns = [
         'posts/<int:post_id>/delete/',
         views.BlogPostDeleteView.as_view(),
         name='delete_post'
-    ),
-
-    path(
-        'posts/<int:post_id>/detail/',
-        views.BlogPostDetailView.as_view(), name='post_detail'
     ),
 
     path(
