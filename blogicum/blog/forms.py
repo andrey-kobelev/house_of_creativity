@@ -14,8 +14,7 @@ class PostModelForm(forms.ModelForm):
 
         widgets = {
             'pub_date': forms.DateTimeInput(
-                attrs={'type': 'datetime-local'},
-                format="%Y-%m-%d %H:%M:%S"
+                attrs={'type': 'date'},
             ),
         }
 

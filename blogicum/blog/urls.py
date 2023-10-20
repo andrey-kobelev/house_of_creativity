@@ -5,21 +5,22 @@ from . import views
 app_name = 'blog'
 
 urlpatterns = [
-    # BLOCK FOR POSTS
+    # BLOCK INDEX
     path('', views.BlogIndexListView.as_view(), name='index'),
 
+    # BLOCK POSTS
     path(
         'posts/create/', views.BlogPostCreateView.as_view(), name='create_post'
     ),
 
     path(
         'posts/<int:post_id>/',
-        views.BlogPostDetailView.as_view(), name='post_detail'
+        views.post_detail, name='post_detail'
     ),
 
     path(
         'posts/<int:post_id>/edit/',
-        views.BlogPostUpdateView.as_view(), name='edit_post'
+        views.edit_post, name='edit_post'
     ),
 
     path(
@@ -27,14 +28,14 @@ urlpatterns = [
         views.BlogPostDeleteView.as_view(),
         name='delete_post'
     ),
-
+    # BLOCK CATEGORY
     path(
         'posts/<slug:category_slug>/category/',
-        views.BlogCategoryListView.as_view(),
+        views.category_posts,
         name='category_posts'
     ),
 
-    # BLOCK FOR COMMENTS
+    # BLOCK COMMENTS
     path(
         'posts/<int:post_id>/comment/',
         views.add_comment,
@@ -53,7 +54,7 @@ urlpatterns = [
         name='delete_comment'
     ),
 
-    # BLOCK FOR PROFILE
+    # BLOCK PROFILE
     path(
         'profile/<slug:username>/', views.profile,
         name='profile'
