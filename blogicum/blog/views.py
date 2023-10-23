@@ -1,7 +1,10 @@
 from django.views.generic import (
     ListView, CreateView, DeleteView
 )
-from django.shortcuts import get_object_or_404, render, redirect, Http404, get_list_or_404
+from django.shortcuts import (
+    get_object_or_404, render,
+    redirect, Http404, get_list_or_404
+)
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
@@ -10,7 +13,9 @@ from django.urls import reverse, reverse_lazy
 from datetime import datetime
 
 from .models import Post, User, Category, Comment
-from .forms import PostModelForm, CommentModelForm, ProfileForm, CreationForm
+from .forms import (
+    PostModelForm, CommentModelForm, ProfileForm, CreationForm
+)
 
 
 # BLOCK INDEX
