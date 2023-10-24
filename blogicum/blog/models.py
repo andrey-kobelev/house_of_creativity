@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 
 User = get_user_model()
 
@@ -126,7 +125,7 @@ class Comment(models.Model):
         Post,
         on_delete=models.CASCADE,
         related_name='comments',
-     )
+    )
 
     class Meta:
         verbose_name = 'комментарий'

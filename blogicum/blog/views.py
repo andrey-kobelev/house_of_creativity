@@ -109,7 +109,8 @@ def post_detail(request, post_id):
     template_name = 'blog/detail.html'
     post = get_object_or_404(Post, pk=post_id)
     if not post.is_published:
-        if (post.author != request.user) or (not request.user.is_authenticated):
+        if ((post.author != request.user)
+                or (not request.user.is_authenticated)):
             raise Http404()
 
     comments = post.comments.all().order_by('created_at')

@@ -43,4 +43,3 @@ class CreationForm(UserCreationForm):
         is_username_english(username)
 
         return username
-
