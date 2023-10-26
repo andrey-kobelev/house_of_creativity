@@ -20,7 +20,6 @@ from .forms import (
 
 # BLOCK INDEX
 class BlogIndexListView(ListView):
-    """Главная страница сайта."""
     model = Post
     template_name = 'blog/index.html'
     ordering = '-pub_date'
@@ -37,7 +36,6 @@ class BlogIndexListView(ListView):
 
 # BLOCK POSTS
 class BlogPostCreateView(LoginRequiredMixin, CreateView):
-    """Добавить пост."""
     model = Post
     form_class = PostModelForm
     template_name = 'blog/create.html'
@@ -54,7 +52,6 @@ class BlogPostCreateView(LoginRequiredMixin, CreateView):
 
 
 def edit_post(request, post_id):
-    """Редактировать пост."""
     temp_name = 'blog/create.html'
     instance = get_object_or_404(
         Post, pk=post_id
@@ -79,7 +76,6 @@ def edit_post(request, post_id):
 
 
 class BlogPostDeleteView(LoginRequiredMixin, DeleteView):
-    """Удалить пост."""
     form = None
     model = Post
     template_name = 'blog/create.html'
@@ -105,7 +101,6 @@ class BlogPostDeleteView(LoginRequiredMixin, DeleteView):
 
 
 def post_detail(request, post_id):
-    """Детали поста."""
     template_name = 'blog/detail.html'
     post = get_object_or_404(Post, pk=post_id)
     if not post.is_published:
@@ -127,7 +122,6 @@ def post_detail(request, post_id):
 
 # CATEGORY BLOCK
 def category_posts(request, category_slug):
-    """Посты определенной категории."""
     temp_name = 'blog/category.html'
     category = get_object_or_404(
         Category,
@@ -154,7 +148,6 @@ def category_posts(request, category_slug):
 # BLOCK COMMENTS
 @login_required
 def add_comment(request, post_id):
-    """Добавить комментарий."""
     if request.user.is_authenticated:
         post = get_object_or_404(Post, pk=post_id)
         form = CommentModelForm(request.POST)
@@ -170,7 +163,6 @@ def add_comment(request, post_id):
 
 @login_required
 def edit_comment(request, post_id, comment_id):
-    """Редактировать комментарий."""
     temp_name = 'blog/comment.html'
     instance = get_object_or_404(Comment, pk=comment_id)
     if instance.author == request.user or request.user.is_superuser:
@@ -193,7 +185,6 @@ def edit_comment(request, post_id, comment_id):
 
 @login_required
 def delete_comment(request, post_id, comment_id):
-    """Удалить комментарий."""
     comment = get_object_or_404(Comment, pk=comment_id)
     temp_name = 'blog/comment.html'
     if comment.author == request.user or request.user.is_superuser:
@@ -211,7 +202,6 @@ def delete_comment(request, post_id, comment_id):
 
 # BLOCK PROFILE
 def profile(request, username):
-    """Профиль пользователя."""
     template_name = 'blog/profile.html'
     usr = get_object_or_404(User, username=username)
     posts = usr.posts.all().order_by('-pub_date')
@@ -232,7 +222,6 @@ def profile(request, username):
 
 @login_required
 def update_profile(request):
-    """Редактировать профиль."""
     template_name = 'blog/user.html'
     instance = get_object_or_404(User, pk=request.user.pk)
     form = ProfileForm(request.GET or None, instance=instance)
