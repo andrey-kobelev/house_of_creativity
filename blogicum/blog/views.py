@@ -3,7 +3,7 @@ from django.views.generic import (
 )
 from django.shortcuts import (
     get_object_or_404, render,
-    redirect, Http404, get_list_or_404
+    redirect, Http404
 )
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -135,12 +135,10 @@ def category_posts(request, category_slug):
         slug=category_slug
     )
 
-    posts = get_list_or_404(
-        category.posts.filter(
-            is_published=True,
-            pub_date__lte=datetime.now(),
-        ).order_by('-pub_date')
-    )
+    posts = category.posts.filter(
+        is_published=True,
+        pub_date__lte=datetime.now()
+    ).order_by('-pub_date')
 
     paginator = Paginator(posts, 10)
     page_obj = paginator.get_page(request.GET.get('page'))

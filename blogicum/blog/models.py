@@ -92,7 +92,6 @@ class Post(BaseModel, TitleModel):
     image = models.ImageField(
         upload_to='posts/',
         verbose_name='Изображение',
-        null=True,
         blank=True
     )
 
