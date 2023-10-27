@@ -3,7 +3,6 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth import get_user_model
 
 from .validators import is_username_english
-
 from .models import Post, Comment
 
 

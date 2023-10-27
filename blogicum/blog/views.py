@@ -1,17 +1,16 @@
-from django.views.generic import (
-    ListView, CreateView, DeleteView
-)
-from django.shortcuts import (
-    get_object_or_404, render,
-    redirect, Http404
-)
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
-from django.urls import reverse, reverse_lazy
-
 from datetime import datetime
 
+from django.views.generic import (
+    ListView, CreateView, DeleteView)
+from django.shortcuts import (
+    get_object_or_404, render,
+    redirect, Http404)
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse, reverse_lazy
+from blogicum import settings
+
+from .utils import get_page_obj
 from .models import Post, User, Category, Comment
 from .forms import (
     PostModelForm, CommentModelForm, ProfileForm, CreationForm
@@ -22,15 +21,14 @@ from .forms import (
 class BlogIndexListView(ListView):
     model = Post
     template_name = 'blog/index.html'
-    ordering = '-pub_date'
-    paginate_by = 10
+    paginate_by = settings.PAGINATE_BY
 
     def get_queryset(self):
         posts = self.model.objects.all().filter(
             is_published=True,
             category__is_published=True,
             pub_date__lte=datetime.now()
-        ).order_by('-pub_date')
+        )
         return posts
 
 
@@ -59,17 +57,15 @@ def edit_post(request, post_id):
 
     if instance.author == request.user and request.user.is_authenticated:
 
-        form = PostModelForm(instance=instance)
+        form = PostModelForm(request.POST or None, instance=instance)
 
         context = {
             'form': form
         }
 
-        if request.method == 'POST':
-            form = PostModelForm(request.POST, instance=instance)
-            if form.is_valid():
-                form.save()
-                return redirect('blog:post_detail', post_id)
+        if form.is_valid():
+            form.save()
+            return redirect('blog:post_detail', post_id)
 
         return render(request, temp_name, context)
     return redirect('blog:post_detail', post_id)
@@ -132,14 +128,11 @@ def category_posts(request, category_slug):
     posts = category.posts.filter(
         is_published=True,
         pub_date__lte=datetime.now()
-    ).order_by('-pub_date')
-
-    paginator = Paginator(posts, 10)
-    page_obj = paginator.get_page(request.GET.get('page'))
+    )
 
     context = {
         'category': category,
-        'page_obj': page_obj
+        'page_obj': get_page_obj(posts, request)
     }
 
     return render(request, temp_name, context)
@@ -167,11 +160,10 @@ def edit_comment(request, post_id, comment_id):
     instance = get_object_or_404(Comment, pk=comment_id)
     if instance.author == request.user or request.user.is_superuser:
         form = CommentModelForm(request.POST or None, instance=instance)
-        if request.POST:
-            form = CommentModelForm(request.POST, instance=instance)
-            if form.is_valid():
-                form.save()
-                return redirect('blog:post_detail', post_id)
+
+        if form.is_valid():
+            form.save()
+            return redirect('blog:post_detail', post_id)
 
         context = {
             'form': form,
@@ -204,16 +196,13 @@ def delete_comment(request, post_id, comment_id):
 def profile(request, username):
     template_name = 'blog/profile.html'
     usr = get_object_or_404(User, username=username)
-    posts = usr.posts.all().order_by('-pub_date')
+    posts = usr.posts.all()
 
     if request.user != usr:
-        posts = usr.posts.filter(is_published=True).order_by('-pub_date')
-
-    paginator = Paginator(posts, 10)
-    page_obj = paginator.get_page(request.GET.get('page'))
+        posts = usr.posts.filter(is_published=True)
 
     context = {
-        'page_obj': page_obj,
+        'page_obj': get_page_obj(posts, request),
         'profile': usr
     }
 
