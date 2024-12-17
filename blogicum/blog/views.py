@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.conf import settings
 from django.views.generic import (
     ListView, CreateView, DeleteView)
 from django.shortcuts import (
@@ -8,7 +9,6 @@ from django.shortcuts import (
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
-from blogicum import settings
 
 from .utils import get_page_obj
 from .models import Post, User, Category, Comment

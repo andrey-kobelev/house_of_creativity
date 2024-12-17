@@ -6,11 +6,16 @@ app_name = 'blog'
 
 urlpatterns = [
     # BLOCK INDEX
-    path('', views.BlogIndexListView.as_view(), name='index'),
+    path(
+        '', views.BlogIndexListView.as_view(),
+        name='index'
+    ),
 
     # BLOCK POSTS
     path(
-        'posts/create/', views.BlogPostCreateView.as_view(), name='create_post'
+        'posts/create/',
+        views.BlogPostCreateView.as_view(),
+        name='create_post'
     ),
 
     path(
