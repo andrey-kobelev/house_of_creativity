@@ -41,6 +41,10 @@ pip install -r requirements.txt
 Выполнить миграции:
 
 ```
+cd blogicum
+```
+
+```
 python3 manage.py migrate  
 ```
 
@@ -53,3 +57,17 @@ python3 manage.py runserver
 ## Фикстуры
 
 В репозитории проекта есть файл с дампом базы данных: _db.json_. Дамп содержит несколько постов; вы можете загрузить его в базу и посмотреть, как выглядит и работает наполненный сайт.
+
+```
+python3 manage.py loaddata db.json  
+```
+
+
+## Автор
+
+[Kobelev Andrey](https://github.com/andrey-kobelev)
+
+## Стек
+
+- [Python 3.9](https://www.python.org/downloads/release/python-390/)
+- [Django3.2](https://docs.djangoproject.com/en/5.1/releases/3.2/)
